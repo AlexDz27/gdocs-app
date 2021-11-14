@@ -1,6 +1,5 @@
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.regex.*;
 
 public class App {
   public static void main(String[] args) {
@@ -143,6 +142,72 @@ public class App {
 
     String[] splitted = gdocString.split("\n");
 
+    HashMap<String, HashMap<String, ArrayList<String>>> resultData = new HashMap<>();
 
+    HashMap<String, ArrayList<String>> septemberDays = new HashMap<>();
+    HashMap<String, ArrayList<String>> octoberDays = new HashMap<>();
+    double sum = 0;
+    for (int i = 0; i < splitted.length; i++) {
+      String day = splitted[i];
+
+      if (day.matches("\\d+")) {
+        if (i >= 115) {
+          ArrayList<String> descriptions = new ArrayList<>();
+          for (int j = i + 1; j < splitted.length; j++) {
+            String description = splitted[j];
+            if (description.isEmpty()) break;
+
+            descriptions.add(description);
+          }
+
+          octoberDays.put(day, descriptions);
+
+          continue;
+        }
+
+        ArrayList<String> descriptions = new ArrayList<>();
+        for (int j = i + 1; j < splitted.length; j++) {
+          String description = splitted[j];
+          if (description.isEmpty()) break;
+
+          descriptions.add(description);
+        }
+
+        septemberDays.put(day, descriptions);
+      }
+    }
+
+    resultData.put("September", septemberDays);
+    resultData.put("October", octoberDays);
+
+//    System.out.println(resultData);
+
+    HashMap<String, ArrayList<String>> septemberDays2 = resultData.get("September");
+    double sumForSeptember = 0;
+    for (ArrayList<String> value : septemberDays2.values()) {
+//      System.out.println(value);
+
+      for (String entry : value) {
+        System.out.println(entry);
+
+        double num = Double.parseDouble(entry.split(" -")[0]);
+        
+        sumForSeptember += num;
+      }
+    }
+
+    HashMap<String, ArrayList<String>> octoberDays2 = resultData.get("October");
+    double sumForOctober = 0;
+    for (ArrayList<String> value : octoberDays2.values()) {
+      for (String entry : value) {
+        System.out.println(entry);
+
+        double num = Double.parseDouble(entry.split(" -")[0]);
+
+        sumForOctober += num;
+      }
+    }
+    
+    System.out.println(sumForSeptember - 1227 - 2140 + sumForOctober);
   }
 }
